@@ -1,0 +1,14 @@
+/mnt/f/UNAHUR/SISTEMAS_OPERATIVOS/TP Integrador/ClientePOS/bin/Debug/net8.0/ClientePOS
+/mnt/f/UNAHUR/SISTEMAS_OPERATIVOS/TP Integrador/ClientePOS/bin/Debug/net8.0/ClientePOS.deps.json
+/mnt/f/UNAHUR/SISTEMAS_OPERATIVOS/TP Integrador/ClientePOS/bin/Debug/net8.0/ClientePOS.runtimeconfig.json
+/mnt/f/UNAHUR/SISTEMAS_OPERATIVOS/TP Integrador/ClientePOS/bin/Debug/net8.0/ClientePOS.dll
+/mnt/f/UNAHUR/SISTEMAS_OPERATIVOS/TP Integrador/ClientePOS/bin/Debug/net8.0/ClientePOS.pdb
+/mnt/f/UNAHUR/SISTEMAS_OPERATIVOS/TP Integrador/ClientePOS/obj/Debug/net8.0/ClientePOS.GeneratedMSBuildEditorConfig.editorconfig
+/mnt/f/UNAHUR/SISTEMAS_OPERATIVOS/TP Integrador/ClientePOS/obj/Debug/net8.0/ClientePOS.AssemblyInfoInputs.cache
+/mnt/f/UNAHUR/SISTEMAS_OPERATIVOS/TP Integrador/ClientePOS/obj/Debug/net8.0/ClientePOS.AssemblyInfo.cs
+/mnt/f/UNAHUR/SISTEMAS_OPERATIVOS/TP Integrador/ClientePOS/obj/Debug/net8.0/ClientePOS.csproj.CoreCompileInputs.cache
+/mnt/f/UNAHUR/SISTEMAS_OPERATIVOS/TP Integrador/ClientePOS/obj/Debug/net8.0/ClientePOS.dll
+/mnt/f/UNAHUR/SISTEMAS_OPERATIVOS/TP Integrador/ClientePOS/obj/Debug/net8.0/refint/ClientePOS.dll
+/mnt/f/UNAHUR/SISTEMAS_OPERATIVOS/TP Integrador/ClientePOS/obj/Debug/net8.0/ClientePOS.pdb
+/mnt/f/UNAHUR/SISTEMAS_OPERATIVOS/TP Integrador/ClientePOS/obj/Debug/net8.0/ClientePOS.genruntimeconfig.cache
+/mnt/f/UNAHUR/SISTEMAS_OPERATIVOS/TP Integrador/ClientePOS/obj/Debug/net8.0/ref/ClientePOS.dll

@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor Central POS & Autorizador de Tarjetas - UNAHUR SO</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-hover: #263449;
+            --border: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-blue: #38bdf8;
+            --accent-green: #22c55e;
+            --accent-red: #ef4444;
+            --accent-amber: #f59e0b;
+            --accent-purple: #a855f7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            padding: 18px 24px;
+            line-height: 1.4;
+        }
+
+        /* Encabezado Principal */
+        .header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 22px;
+            margin-bottom: 18px;
+            gap: 16px;
+        }
+
+        .header-title h1 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-title p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .launcher-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(15, 23, 42, 0.75);
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .launcher-box label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        select, button {
+            background: #0f172a;
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 7px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .btn-launch {
+            background: var(--accent-blue);
+            color: #0f172a;
+            font-weight: 700;
+            border: none;
+            transition: opacity 0.2s;
+        }
+
+        .btn-launch:hover {
+            opacity: 0.9;
+        }
+
+        /* Tarjetas de Resumen (KPIs) */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .kpi-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px 18px;
+        }
+
+        .kpi-label {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+        }
+
+        .kpi-value {
+            font-size: 1.65rem;
+            font-weight: 700;
+            margin: 6px 0 4px 0;
+        }
+
+        .kpi-sub {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Grilla Principal de 2 Columnas */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1.25fr 1fr;
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+
+        @media (max-width: 1100px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 20px;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .panel-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #e2e8f0;
+        }
+
+        .badge-so {
+            font-size: 0.72rem;
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--accent-blue);
+            padding: 3px 8px;
+            border-radius: 999px;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+
+        /* Tarjetas de Crédito */
+        .cards-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .credit-card-item {
+            background: rgba(15, 23, 42, 0.55);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 14px;
+        }
+
+        .cc-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .cc-number {
+            font-family: monospace;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            background: rgba(56, 189, 248, 0.1);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .cc-holder {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-left: 8px;
+        }
+
+        .cc-amounts {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .cc-available {
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .progress-bg {
+            width: 100%;
+            height: 8px;
+            background: #0f172a;
+            border-radius: 999px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .cc-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.78rem;
+        }
+
+        .btn-pay {
+            background: rgba(34, 197, 94, 0.15);
+            color: #4ade80;
+            border: 1px solid rgba(34, 197, 94, 0.4);
+            padding: 4px 10px;
+            font-size: 0.76rem;
+            font-weight: 600;
+            border-radius: 5px;
+        }
+
+        .btn-pay:hover {
+            background: rgba(34, 197, 94, 0.3);
+        }
+
+        /* Estadísticas por Rubro */
+        .rubro-item {
+            margin-bottom: 12px;
+        }
+
+        .rubro-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+        }
+
+        /* Tablas */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.83rem;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 9px 10px;
+            border-bottom: 1px solid rgba(51, 65, 85, 0.6);
+        }
+
+        th {
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.73rem;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 0.73rem;
+        }
+
+        .tag-aprobada {
+            background: rgba(34, 197, 94, 0.15);
+            color: #4ade80;
+            border: 1px solid rgba(34, 197, 94, 0.35);
+        }
+
+        .tag-rechazada {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.35);
+        }
+
+        .tag-pago {
+            background: rgba(168, 85, 247, 0.18);
+            color: #c084fc;
+            border: 1px solid rgba(168, 85, 247, 0.35);
+        }
+
+        .tag-compra {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+        }
+
+        .mono {
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-title">
+            <h1>💳 Autorizador Central de Tarjetas de Crédito & Telemetría POS</h1>
+            <p>UNAHUR — Sistemas Operativos (Opción 5: IPC con Sockets TCP, Hilos y Sección Crítica) | Estado: <strong id="srvEstado" style="color: var(--accent-amber);">Conectando...</strong> | PID Servidor: <strong id="srvPid">-</strong> | Hora: <strong id="srvHora">-</strong></p>
+        </div>
+        <div>
+            <button onclick="resetearSistema()" style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); font-weight: 700; padding: 8px 14px; border-radius: 8px; cursor: pointer;">
+                🔄 Resetear Memoria a Cero
+            </button>
+        </div>
+    </div>
+
+    <!-- Indicadores Superiores -->
+    <div class="kpi-grid">
+        <div class="kpi-card">
+            <div class="kpi-label">Terminales POS Activas</div>
+            <div class="kpi-value" style="color: var(--accent-blue);" id="kpiClientes">0</div>
+            <div class="kpi-sub">Hilos (Threads) concurrentes en el SO</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">Transacciones Totales</div>
+            <div class="kpi-value" id="kpiTotalTx">0</div>
+            <div class="kpi-sub">
+                <span style="color: var(--accent-green);">✔ Aprobadas: <strong id="kpiAprobadas">0</strong></span> &nbsp;|&nbsp;
+                <span style="color: var(--accent-red);">✖ Rechazadas: <strong id="kpiRechazadas">0</strong></span>
+            </div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">Volumen Compras Aprobadas</div>
+            <div class="kpi-value" style="color: var(--accent-green);" id="kpiMontoCompras">$0.00</div>
+            <div class="kpi-sub">Consumo acumulado en comercios</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">Pagos de Resumen Recibidos</div>
+            <div class="kpi-value" style="color: var(--accent-purple);" id="kpiMontoPagos">$0.00</div>
+            <div class="kpi-sub">Saldo liberado en tarjetas</div>
+        </div>
+    </div>
+
+    <!-- Sección Principal -->
+    <div class="main-grid">
+        <!-- Columna Izquierda: Tarjetas de Crédito -->
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-title">🔐 Estado de Tarjetas y Límites de Clientes</span>
+                <span class="badge-so">Heap Compartido + Mutex (lock)</span>
+            </div>
+            <div class="cards-list" id="contenedorTarjetas"></div>
+        </div>
+
+        <!-- Columna Derecha: Estadísticas por Rubro y Terminales Conectadas -->
+        <div style="display: flex; flex-direction: column; gap: 18px;">
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title">📊 Estadísticas de Compras por Rubro</span>
+                    <span class="badge-so">Tiempo Real</span>
+                </div>
+                <div id="contenedorRubros"></div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title">🖥️ Terminales POS Conectadas (Sockets Activos)</span>
+                    <span class="badge-so">1 Hilo SO por Cliente</span>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Terminal</th>
+                            <th>Rubro Comercio</th>
+                            <th>Socket FD</th>
+                            <th>Hilo SO</th>
+                            <th>IP:Puerto</th>
+                            <th>TX</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaTerminales">
+                        <tr><td colspan="6" style="color: var(--text-muted); text-align:center;">Esperando conexión de terminales POS...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Monitor de Transacciones en Vivo -->
+    <div class="panel">
+        <div class="panel-header">
+            <span class="panel-title">⚡ Auditoría de Transacciones en Tiempo Real (Recepción en Milisegundos)</span>
+            <span class="badge-so">TCP Stream Framing (\n)</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>N° TX</th>
+                    <th>Hora Exacta</th>
+                    <th>Terminal</th>
+                    <th>Rubro</th>
+                    <th>Tarjeta / Titular</th>
+                    <th>Tipo</th>
+                    <th>Importe</th>
+                    <th>Resolución Servidor</th>
+                    <th>Saldo Disponible</th>
+                    <th>Hilo SO</th>
+                </tr>
+            </thead>
+            <tbody id="tablaTransacciones">
+                <tr><td colspan="10" style="color: var(--text-muted); text-align:center;">Sin transacciones registradas aún.</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Si el usuario abre dashboard.html con doble clic (file://), apunta automáticamente a http://localhost:8080
+        const BASE_URL = window.location.protocol === 'file:' ? 'http://localhost:8080' : '';
+
+        function formatearMoneda(valor) {
+            return '$' + Number(valor || 0).toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        async function acreditarPago(nroTarjeta) {
+            try {
+                await fetch(`${BASE_URL}/api/pagar?tarjeta=${encodeURIComponent(nroTarjeta)}&monto=25000`);
+                actualizarEstado();
+            } catch (e) {}
+        }
+
+        async function resetearSistema() {
+            try {
+                await fetch(`${BASE_URL}/api/reset`);
+                actualizarEstado();
+            } catch (e) {}
+        }
+
+        async function abrirNuevaTerminal() {
+            const rubro = document.getElementById('selRubro').value;
+            try {
+                await fetch(`${BASE_URL}/api/abrir-terminal?rubro=${encodeURIComponent(rubro)}`);
+                setTimeout(actualizarEstado, 400);
+            } catch (e) {}
+        }
+
+        async function cerrarTerminal(idInterno) {
+            try {
+                await fetch(`${BASE_URL}/api/cerrar-terminal?id=${encodeURIComponent(idInterno)}`);
+                setTimeout(actualizarEstado, 300);
+            } catch (e) {}
+        }
+
+        async function actualizarEstado() {
+            const badgeEstado = document.getElementById('srvEstado');
+            try {
+                const res = await fetch(`${BASE_URL}/api/estado`);
+                const data = await res.json();
+
+                badgeEstado.textContent = 'ONLINE (Puerto 5000 / 8080)';
+                badgeEstado.style.color = '#4ade80';
+
+                document.getElementById('srvPid').textContent = data.servidorPid;
+                document.getElementById('srvHora').textContent = data.horaServidor;
+                document.getElementById('kpiClientes').textContent = data.clientesConectados;
+                document.getElementById('kpiTotalTx').textContent = data.totalTransacciones;
+                document.getElementById('kpiAprobadas').textContent = data.totalAprobadas;
+                document.getElementById('kpiRechazadas').textContent = data.totalRechazadas;
+                document.getElementById('kpiMontoCompras').textContent = formatearMoneda(data.montoTotalCompras);
+                document.getElementById('kpiMontoPagos').textContent = formatearMoneda(data.montoTotalPagos);
+
+                // Renderizar Tarjetas
+                const contTarjetas = document.getElementById('contenedorTarjetas');
+                contTarjetas.innerHTML = data.tarjetas.map(t => {
+                    const porcentajeUso = t.LimiteTotal > 0 ? Math.min(100, Math.round((t.DeudaActual / t.LimiteTotal) * 100)) : 0;
+                    let colorBarra = '#22c55e';
+                    if (porcentajeUso >= 85) colorBarra = '#ef4444';
+                    else if (porcentajeUso >= 60) colorBarra = '#f59e0b';
+
+                    return `
+                        <div class="credit-card-item">
+                            <div class="cc-top">
+                                <div>
+                                    <span class="cc-number">${t.Numero}</span>
+                                    <span class="tag tag-pago" style="margin-left:6px; font-family:monospace;">CVV: ${t.CodigoSeguridad}</span>
+                                    <span class="cc-holder">${t.Titular}</span>
+                                </div>
+                            </div>
+                            <div class="cc-amounts">
+                                <span>Límite: <strong>${formatearMoneda(t.LimiteTotal)}</strong> | Usado: <strong>${formatearMoneda(t.DeudaActual)}</strong> (${porcentajeUso}%)</span>
+                                <span>Disponible: <strong class="cc-available" style="color:${colorBarra}">${formatearMoneda(t.SaldoDisponible)}</strong></span>
+                            </div>
+                            <div class="progress-bg">
+                                <div class="progress-fill" style="width: ${porcentajeUso}%; background: ${colorBarra};"></div>
+                            </div>
+                            <div class="cc-footer">
+                                <span style="color: #4ade80;">✔ Compras Aprobadas: ${t.ComprasAprobadas}</span>
+                                <span style="color: #f87171;">✖ Rechazos por Límite: ${t.ComprasRechazadas}</span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                // Renderizar Rubros
+                const contRubros = document.getElementById('contenedorRubros');
+                const totalCompras = data.montoTotalCompras > 0 ? data.montoTotalCompras : 1;
+                contRubros.innerHTML = data.rubros.map(r => {
+                    const pct = data.montoTotalCompras > 0 ? Math.round((r.MontoAcumulado / totalCompras) * 100) : 0;
+                    return `
+                        <div class="rubro-item">
+                            <div class="rubro-header">
+                                <span><strong>${r.Rubro}</strong> <span style="color:var(--text-muted)">(${r.CantidadCompras} compras)</span></span>
+                                <span><strong>${formatearMoneda(r.MontoAcumulado)}</strong> (${pct}%)</span>
+                            </div>
+                            <div class="progress-bg">
+                                <div class="progress-fill" style="width: ${pct}%; background: var(--accent-blue);"></div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                // Renderizar Terminales Activas
+                const tbodyTerm = document.getElementById('tablaTerminales');
+                if (!data.terminales || data.terminales.length === 0) {
+                    tbodyTerm.innerHTML = '<tr><td colspan="6" style="color: var(--text-muted); text-align:center;">Ninguna terminal conectada actualmente.</td></tr>';
+                } else {
+                    tbodyTerm.innerHTML = data.terminales.map(term => `
+                        <tr>
+                            <td class="mono"><strong>${term.CodigoTerminal}</strong></td>
+                            <td><span class="tag tag-compra">${term.Rubro}</span></td>
+                            <td class="mono">${term.DescriptorSocket}</td>
+                            <td class="mono">Hilo #${term.HiloSoId}</td>
+                            <td class="mono" style="color:var(--text-muted)">${term.DireccionIp}</td>
+                            <td><strong>${term.TransaccionesProcesadas}</strong></td>
+                        </tr>
+                    `).join('');
+                }
+
+                // Renderizar Historial de Transacciones
+                const tbodyTx = document.getElementById('tablaTransacciones');
+                if (!data.transacciones || data.transacciones.length === 0) {
+                    tbodyTx.innerHTML = '<tr><td colspan="10" style="color: var(--text-muted); text-align:center;">Esperando transacciones desde las terminales POS...</td></tr>';
+                } else {
+                    tbodyTx.innerHTML = data.transacciones.map(tx => {
+                        const claseEstado = tx.Estado === 'APROBADA' ? 'tag-aprobada' : 'tag-rechazada';
+                        const claseTipo = tx.Tipo === 'PAGO' ? 'tag-pago' : 'tag-compra';
+                        return `
+                            <tr>
+                                <td class="mono">#${tx.Numero}</td>
+                                <td class="mono">${tx.Hora}</td>
+                                <td class="mono"><strong>${tx.Terminal}</strong></td>
+                                <td>${tx.Rubro}</td>
+                                <td><span class="mono">${tx.Tarjeta}</span> — ${tx.Titular}</td>
+                                <td><span class="tag ${claseTipo}">${tx.Tipo}</span></td>
+                                <td class="mono"><strong>${formatearMoneda(tx.Importe)}</strong></td>
+                                <td><span class="tag ${claseEstado}">${tx.Estado}</span> <span style="font-size:0.78rem; color:var(--text-muted);">${tx.Motivo}</span></td>
+                                <td class="mono">${formatearMoneda(tx.DisponibleRestante)}</td>
+                                <td class="mono">Hilo #${tx.HiloId}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+            } catch (err) {
+                badgeEstado.textContent = 'ESPERANDO SERVIDOR (Ejecute 1_Ejecutar_Servidor.bat)';
+                badgeEstado.style.color = '#f87171';
+            }
+        }
+
+        setInterval(actualizarEstado, 1000);
+        actualizarEstado();
+    </script>
+</body>
+</html>
+
